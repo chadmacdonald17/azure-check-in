@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Check-In App</title>
+</head>
+<body>
+    <h1>How are you feeling?</h1>
+
+    <input type="range" min="1" max="10" value="5" id="slider">
+    <p>Value: <span id="value">5</span></p>
+
+    <button onclick="sendData()">Check In</button>
+
+    <p id="result"></p>
+
+    <script>
+        const slider = document.getElementById("slider");
+        const valueDisplay = document.getElementById("value");
+
+        slider.oninput = function() {
+            valueDisplay.innerText = this.value;
+        }
+
+        function sendData() {
+            fetch("/check", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ value: slider.value })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("result").innerText = data.message;
+            });
+        }
+    </script>
+</body>
+</html>
